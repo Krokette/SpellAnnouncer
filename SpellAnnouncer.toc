@@ -1,0 +1,6 @@
+## Interface: 30300
+## Title: SpellAnnouncer
+## Notes: If you want to announce some spell you casted (like soulstone, bloodlust, etc) in the chat, use this addon.
+## Version: 0.0.1
+## Author: kr0kette
+SpellAnnouncer.lua
