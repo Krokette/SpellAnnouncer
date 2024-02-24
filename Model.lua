@@ -1,14 +1,7 @@
+SpellAnnouncerDB = SpellAnnouncerDB or { spells = {} }
+
 -- Initialize addon frame
 local frame = CreateFrame("Frame")
-local spellsToAnnounce = {
-    ["Soulstone Resurrection"] = true,
-    ["Mana Tide Totem"] = true,
-    ["Mana Spring Totem"] = true,
-    ["Bloodlust"] = true,
-    ["Water Walking"] = true,
-    ["Unholy Frenzy"] = true,
-    -- Add other spells here as needed
-}
 
 local CREATE_SOULSTONE_SPELL_ID = 20707
 -- GetSpellInfo to retrieve the name of the spell
@@ -21,6 +14,11 @@ end
 
 -- Function to announce spell usage
 function AnnounceSpell(casterName, spellName, targetName)
+    -- Check if the spell is in the list of spells to announce
+    if not SpellAnnouncerDB.spells[spellName] then
+        return
+    end
+
     local spellLink = GetSpellLink(spellName) or spellName
 
     -- Check if the spell used is "Create Soulstone" and the target has the "Soulstone Resurrection" buff
@@ -44,7 +42,7 @@ function OnEvent(event, ...)
         local timestamp, eventType, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID, spellName = CombatLogGetCurrentEventInfo()
 
         if eventType == "SPELL_CAST_SUCCESS" then
-            if sourceName == UnitName("player") and spellsToAnnounce[spellName] then
+            if sourceName == UnitName("player") and SpellAnnouncerDB.spells[spellName] then
                 AnnounceSpell(sourceName, spellName, destName or '')
             end
         end
